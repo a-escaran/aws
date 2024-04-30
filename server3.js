@@ -2,12 +2,14 @@ const fs = require('fs');
 const AWS = require('aws-sdk');
 const express = require('express');
 const cors = require('cors');
+const populateImages = require('./src/components/Services/S3pop')
+const MusPop = require('./src/components/Services/MusPop')
 
 const app = express();
 app.use(cors());
 
 // Specify the filepath to your AWS credentials file
-const credentialsPath = 'C:/Users/Owner/.aws/credentials'; // Update this path according to your environment
+const credentialsPath = './credentials'; // Update this path according to your environment
 
 // Read the AWS credentials file
 fs.readFile(credentialsPath, 'utf8', (err, data) => {
@@ -18,7 +20,7 @@ fs.readFile(credentialsPath, 'utf8', (err, data) => {
 
   // Initialize default values
   let profile = 'default';
-  let sessionToken = 'IQoJb3JpZ2luX2VjED8aCXVzLXdlc3QtMiJHMEUCIQCHDEfOaVcJ8f9fMhrptKVT+tt2DkxJxjXNU8cU3jf7qwIgL7fFOu8Kid/FFnJtJ1trDAS2Pmf8QXLHUBRNURDcOY0qvwIIiP//////////ARAAGgwyMTExMjU3Mzk5NTMiDLxA6DH1fAqkepQK6yqTAhACXSDiyoaHTvv6a71kr8yHn1NXZNNprvcNt9fkfHaB35jQJpkb9e2q/vE6oIVsYM3lbc0liMSTYffKpMfuuwIWcCZPerKamJqpsLbyj08XgyGU+H/dM4SAzZwH64ITXOssPCOXqXeKT+PD4Z/LJspgpa+BO7kyFXpm+rA5CBBby3dSLL4dUNMe19qC+1WumFEaMSUxX2K0mktedQtAEwFVZatCAKJHeccYpxzp8AiD60R3+L3p2V1bfeU6zpv7FKjF/fE2hPW0yEPwvW+9ZQ+QP2esrVfciWUYm7uxI/1+QU4X+kXYHaR+zbFwag6tqAM9xcEgXfNuG88Zx/X9N5i9mffiW8TgD0cDV+tkx9B5pzW4MNbSorEGOp0BxBrlGN3unp3qhxqRnLVfXby/ZPUPQ68dXEVZf0n4lsean7iuhG9SI78zUYaT38s2DwjE9qUYhDWu0O/5CLiC0fPP/p/EgurG2jfZsY+rdKgFYvAYpHiznUpDdvGXNdnhNLOSbHqo205SNBSizfMsloFMaJjUcUV13HufmdwXuFdKUKZvtADHT5CKUKzS1ajo83mEgb8Xz/mcma9MYQ==';
+  let sessionToken = '';//Value to be added when needed to be used literally the only thing i couldnt automate for some ungodly reason
   let accessKeyId, secretAccessKey;
 
   // Parse the credentials from the file
@@ -49,6 +51,65 @@ fs.readFile(credentialsPath, 'utf8', (err, data) => {
   app.get('/aws-credentials', (req, res) => {
     res.json({ accessKeyId, secretAccessKey, sessionToken });
   });
+
+  app.get('/api/populate-songs', async (req, res) => {
+    try {
+      // Extract AWS credentials from AWS configuration
+      const { accessKeyId, secretAccessKey, sessionToken } = AWS.config.credentials || {};
+      // Call MusPop function with AWS credentials
+      await MusPop(accessKeyId, secretAccessKey, sessionToken);
+      res.json({ message: 'Songs populated successfully' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+    
+  app.get('/api/populate-bucket', async (req, res) => {
+    try {
+      // Extract AWS credentials from AWS configuration
+      const { accessKeyId, secretAccessKey, sessionToken } = AWS.config.credentials || {};
+      // Call populateImages function with AWS credentials
+      await populateImages(accessKeyId, secretAccessKey, sessionToken);
+      res.json({ message: 'Bucket populated successfully' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Login endpoint
+app.post('/api/login', async (req, res) => { // Change to POST method for submitting credentials
+  const { email, password } = req.body;
+
+  // Perform validation against DynamoDB
+  try {
+      // Query DynamoDB to check if the user exists with the provided email and password
+      const params = {
+          TableName: 'login',
+          Key: {
+              email: email,
+              password: password // Include password in the key
+          }
+      };
+
+      // Perform the query
+      const data = await dynamodb.get(params).promise();
+
+      // If a user with the provided email and password exists
+      if (data && data.Item) {
+          // Return success response
+          res.json({ success: true, message: 'Login successful' });
+      } else {
+          // Return error response if user not found or credentials are incorrect
+          res.status(401).json({ success: false, error: 'Invalid email or password' });
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      // Return error response if there's an internal server error
+      res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
 
   // Start the Express server
   const PORT = 5000;

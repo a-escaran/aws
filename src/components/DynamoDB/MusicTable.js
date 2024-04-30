@@ -5,16 +5,16 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function createMusicTable() {
+async function createMusicTable(accessKeyId, secretAccessKey, sessionToken) {
     try {
         await delay(3000);
 
         // Specify the AWS credentials profile
         AWS.config.credentials = {
-            accessKeyId: '',
-            secretAccessKey: '',
-            sessionToken: '', 
-            profile: ''
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+            sessionToken: sessionToken, 
+            profile: 'default'
         }; 
 
         // Set the region for AWS services

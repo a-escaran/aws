@@ -7,10 +7,10 @@ async function UserPop(accessKeyId, secretAccessKey, sessionToken) {
     try {
         // Specify the AWS credentials profile
         AWS.config.credentials = {
-            accessKeyId: '',
-            secretAccessKey: '',
-            sessionToken: '', 
-            profile: ''   
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+            sessionToken: sessionToken, 
+            profile: 'default'
         };
 
 

@@ -2,23 +2,22 @@ const fs = require('fs');
 const axios = require('axios');
 const AWS = require('aws-sdk');
 
-AWS.config.credentials = {
-    accessKeyId: '',
-    secretAccessKey: '',
-    sessionToken: '', 
-    profile: ''
-};
-
-
-// Log the AWS credentials being used
-console.log(AWS.config.credentials);
-
-// Set the region for AWS services
-AWS.config.update({ region: 'us-east-1' });
-const s3 = new AWS.S3();
-
-async function populateImages() {
+async function populateImages(accessKeyId, secretAccessKey, sessionToken) {
     try {
+        // Set AWS credentials
+        AWS.config.credentials = {
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+            sessionToken: sessionToken
+        };
+
+        // Log the AWS credentials being used
+        console.log(AWS.config.credentials);
+
+        // Set the region for AWS services
+        AWS.config.update({ region: 'us-east-1' });
+        const s3 = new AWS.S3();
+
         // Read the JSON file
         const artistData = JSON.parse(fs.readFileSync('./public/a1.json', 'utf8'));
 
@@ -43,8 +42,8 @@ async function populateImages() {
         console.log('All images uploaded successfully.');
     } catch (error) {
         console.error('Error:', error);
+        throw error;
     }
 }
 
-// Call the function to start the process
 module.exports = populateImages;

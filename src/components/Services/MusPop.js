@@ -1,15 +1,19 @@
 const AWS = require('aws-sdk');
 const fs = require('fs').promises;
 
-async function MusPop() {
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function MusPop(accessKeyId, secretAccessKey, sessionToken) {
+    await delay(17000);
     try {
          // Specify the AWS credentials profile
          AWS.config.credentials = {
-            accessKeyId: '',
-            secretAccessKey: '',
-            sessionToken: '', 
-            profile: ''        
-        };
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+            sessionToken: sessionToken,
+            profile: 'default'
+         };
 
         // Set the region for AWS services
         AWS.config.update({ region: 'us-east-1' });
@@ -45,7 +49,7 @@ async function insertSong(dynamodb, title, artist, year, web_url, img_url) {
     try {
         // Define parameters for putting an item into the table
         const params = {
-            TableName: 'songs',
+            TableName: 'music',
             Item: {
                 'title': { S: title }, // Partition key attribute
                 'artist': { S: artist }, // Sort key attribute

@@ -1,70 +1,27 @@
-# Getting Started with Create React App
+# Cloud Computing Assessment 1 Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Author
+Arman Joshua Roberto Escaran
 
-## Available Scripts
+## Description
+This project is a React application developed for the Cloud Computing Assessment 1. The objective of the assessment was to create a program that runs on an EC2 server. While the typical guideline suggested the use of Java and IntelliJ, I opted to use JavaScript with React and VSCode for this implementation.
 
-In the project directory, you can run:
+## Features
+- **Create DynamoDB Table called Login**: Sets up a DynamoDB table named Login and populates it with 10 users inspired by the show "How I Met Your Mother", including email, username, and password fields.
+- **Create DynamoDB Table called Music**: Establishes a DynamoDB table named Music and populates it using data from the provided `a1.json` file, including song details such as title, artist, image URL, web URL, and year.
+- **Populate S3 Bucket with Images**: Uploads images referenced in the Music table's image URLs to the pre-existing S3 bucket named `s3784498Images`.
+- **Input Validation for Login and Register Pages**: Implements input validation for the login and registration forms.
 
-### `npm start`
+## Main Files
+- **App.js**: Routes the application's files together to enable functionality.
+- **Server3.js**: Handles all backend functionality, including reading the AWS configuration file and passing its values to the frontend JavaScript files.
+- **LoginPage.js**: Frontend component for the login form and associated functionality.
+- **LoginTable.js**: Creates the Login table in DynamoDB.
+- **LoginValidation.js**: Manages input validation for the login form.
+- **UserPop.js**: Populates the Login table created by LoginTable.js.
+- **RegisterPage.js**: Frontend component for the registration form and associated functionality.
+- **RegisterValidation.js**: Manages input validation for the registration form.
+- **MusicTable.js**: Creates the DynamoDB table named Music.
+- **MusPop.js**: Populates the Music table with songs from the `a1.json` file.
+- **S3pop.js**: Populates the pre-existing S3 bucket with image uploads from the image URLs in the `a1.json` file.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
